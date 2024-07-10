@@ -97,6 +97,134 @@ logout() {
 
 ###################################################################
 ###################################################################
+# Paket Yüklendi mi
+is_loading_package() {
+    sleep 2
+    echo -e "\n###### ${PACKAGE} ######  "
+    read -p "Paketin Yüklendiğini Öğrenmek İster misiniz ? e/h " packageResult
+    if [[ $packageResult == "e" || $packageResult == "E" ]]; then
+        echo -e "Yüklenmiş paket bilgisini öğrenme ..."
+
+        # Geri Sayım
+        ./countdown.sh
+
+        echo -e "Bulunduğum dizin => $(pwd)\n"
+        sleep 1
+
+        echo -e "######### Paket Bağımlılığı #########\n"
+        read -p "Lütfen yüklenmiş paket adını giriniz examples: git" user_input
+
+        # dependency
+        package_information "$user_input"
+    else
+        echo -e "Paket Yüklenme Bilgisi İstenmedi..."
+    fi
+}
+
+package_information() {
+    # parametre - arguman
+    local packagename=$1
+
+    # Belirli bir Komutun Yolu (Sistemde nerede olduğunu bulmak)
+    which $packagename
+
+    # İlgili Paketi bulma
+    whereis $packagename
+
+    # Paket Bilgilerini Görüntüleme
+    apt-cache show $packagename
+
+    # Paketin Yüklü olup olmadığını Kontrol Etmek
+    dpkg-query -W -f='${Status} ${Package}\n' $packagename
+
+    # Geri Sayım
+    ./countdown.sh
+
+    # Yüklü Tüm paketleri Listele
+    dpkg -l 
+
+    # Geri Sayım
+    ./countdown.sh
+
+    # Eğer paket isimleri uzunsa grep ile arama yap 
+    dpkg -l | grep $packagename
+
+    # Dosyalarını Listelemek İstersem
+    dpkg -L $packagename
+
+    ############
+    # Yüklü Tüm Paketleri Listelemek
+    apt list --installed
+
+    # Belirli bir paketin yüklü olup olmadığını kontrol etmek
+    apt list --installed | grep $packagename 
+}
+
+###################################################################
+###################################################################
+# Paket Bağımlıklarını Görme
+check_package() {
+    sleep 2
+    echo -e "\n###### ${CHECK} ######  "
+    read -p "Sistem İçin Genel Bağımlılık Paketini Yüklemek İstiyor musunuz ? e/h " checkResult
+    if [[ $checkResult == "e" || $checkResult == "E" ]]; then
+        echo -e "Yüklenecek Paket Bağımlılığı ..."
+
+        # Geri Sayım
+        ./countdown.sh
+
+        echo -e "Bulunduğum dizin => $(pwd)\n"
+        sleep 1
+
+        echo -e "######### Paket Bağımlılığı #########\n"
+        read -p "Lütfen yüklemek istediğiniz paket adını yazınız examples: nginx" user_input
+
+        # dependency
+        dependency "$user_input"
+    else
+        echo -e "Bağımlılıklar kontrol edilmedi ..."
+    fi
+}
+
+dependency() {
+    # parametre - arguman
+    local packagename=$1
+    #
+    sudo apt-get check
+    sudo apt-cache depends $packagename
+    sudo apt-get install $packagename
+}
+
+
+
+###################################################################
+###################################################################
+# Clean
+# Install
+clean() {
+    sleep 2
+    echo -e "\n###### ${CLEANER} ######  "
+    read -p "Sistemde Gereksiz Paketleri Temizlemek İster misiniz ? e/h " cleanResult
+    if [[ $cleanResult == "e" || $cleanResult == "E" ]]; then
+        echo -e "Gereksiz Paket Temizliği Başladı ..."
+
+        # Geri Sayım
+        sudo ./countdown.sh
+
+        echo -e "######### nginx #########\n"
+        sudo apt-get autoremove -y
+        sudo apt autoclean
+        echo -e "Kırık Bağımlılıkları Yükle ..."
+        sudo apt install -f
+    else
+        echo -e "Güncelleme yapılmadı"
+    fi
+}
+clean
+
+
+###################################################################
+###################################################################
 # Git Packet Install
 # Install
 gitInstall() {
@@ -620,107 +748,6 @@ dockerCompose(){
     fi
 }
 
-###################################################################
-###################################################################
-###################################################################
-###################################################################
-# Paket Yüklendi mi
-is_loading_package() {
-    sleep 2
-    echo -e "\n###### ${PACKAGE} ######  "
-    read -p "Paketin Yüklendiğini Öğrenmek İster misiniz ? e/h " packageResult
-    if [[ $packageResult == "e" || $packageResult == "E" ]]; then
-        echo -e "Yüklenmiş paket bilgisini öğrenme ..."
-
-        # Geri Sayım
-        ./countdown.sh
-
-        echo -e "Bulunduğum dizin => $(pwd)\n"
-        sleep 1
-
-        echo -e "######### Paket Bağımlılığı #########\n"
-        read -p "Lütfen yüklenmiş paket adını giriniz examples: git" user_input
-
-        # dependency
-        package_information "$user_input"
-    else
-        echo -e "Paket Yüklenme Bilgisi İstenmedi..."
-    fi
-}
-
-package_information() {
-    # parametre - arguman
-    local packagename=$1
-
-    # Belirli bir Komutun Yolu (Sistemde nerede olduğunu bulmak)
-    which $packagename
-
-    # İlgili Paketi bulma
-    whereis $packagename
-
-    # Paket Bilgilerini Görüntüleme
-    apt-cache show $packagename
-
-    # Paketin Yüklü olup olmadığını Kontrol Etmek
-    dpkg-query -W -f='${Status} ${Package}\n' $packagename
-
-    # Geri Sayım
-    ./countdown.sh
-
-    # Yüklü Tüm paketleri Listele
-    dpkg -l 
-
-    # Geri Sayım
-    ./countdown.sh
-
-    # Eğer paket isimleri uzunsa grep ile arama yap 
-    dpkg -l | grep $packagename
-
-    # Dosyalarını Listelemek İstersem
-    dpkg -L $packagename
-
-    ############
-    # Yüklü Tüm Paketleri Listelemek
-    apt list --installed
-
-    # Belirli bir paketin yüklü olup olmadığını kontrol etmek
-    apt list --installed | grep $packagename 
-}
-
-###################################################################
-###################################################################
-# Paket Bağımlıklarını Görme
-check_package() {
-    sleep 2
-    echo -e "\n###### ${CHECK} ######  "
-    read -p "Sistem İçin Genel Bağımlılık Paketini Yüklemek İstiyor musunuz ? e/h " checkResult
-    if [[ $checkResult == "e" || $checkResult == "E" ]]; then
-        echo -e "Yüklenecek Paket Bağımlılığı ..."
-
-        # Geri Sayım
-        ./countdown.sh
-
-        echo -e "Bulunduğum dizin => $(pwd)\n"
-        sleep 1
-
-        echo -e "######### Paket Bağımlılığı #########\n"
-        read -p "Lütfen yüklemek istediğiniz paket adını yazınız examples: nginx" user_input
-
-        # dependency
-        dependency "$user_input"
-    else
-        echo -e "Bağımlılıklar kontrol edilmedi ..."
-    fi
-}
-
-dependency() {
-    # parametre - arguman
-    local packagename=$1
-    #
-    sudo apt-get check
-    sudo apt-cache depends $packagename
-    sudo apt-get install $packagename
-}
 
 ###################################################################
 ###################################################################
@@ -758,30 +785,7 @@ information() {
 }
 information
 
-###################################################################
-###################################################################
-# Clean
-# Install
-clean() {
-    sleep 2
-    echo -e "\n###### ${CLEANER} ######  "
-    read -p "Sistemde Gereksiz Paketleri Temizlemek İster misiniz ? e/h " cleanResult
-    if [[ $cleanResult == "e" || $cleanResult == "E" ]]; then
-        echo -e "Gereksiz Paket Temizliği Başladı ..."
 
-        # Geri Sayım
-        ./countdown.sh
-
-        echo -e "######### nginx #########\n"
-        sudo apt-get autoremove -y
-        sudo apt autoclean
-        echo -e "Kırık Bağımlılıkları Yükle ..."
-        sudo apt install -f
-    else
-        echo -e "Güncelleme yapılmadı"
-    fi
-}
-clean
 
 ###################################################################
 ###################################################################

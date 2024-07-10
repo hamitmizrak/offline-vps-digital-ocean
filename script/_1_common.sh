@@ -399,9 +399,7 @@ portVersion() {
     gcc --version # gcc: GNU C compiler derlemek
     g++ --version # g++: GNU C++ compiler derlemek
     make --version # make: Makefile kullanarak derlemek içindir
-    java --version
     git --version
-    docker-compose -v
 }
 portVersion
 
