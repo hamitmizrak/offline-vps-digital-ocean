@@ -37,48 +37,38 @@ updated() {
             read -p "Sistemin Listesini Güncellemek İstiyor musunuz ? e/h " listUpdatedResult
             if [[ $listUpdatedResult == "e" || $listUpdatedResult == "E" ]]; then
                 echo -e "List Güncelleme Başladı ..."
-
-                # Geri Sayım
                 ./countdown.sh
-
-                # Güncelleme
                 sudo apt-get update
             else
-                echo -e "Güncelleme yapılmadı"
+                echo -e "Sistemin Listesini Güncellenemesi yapılmadı"
             fi
             ;; 
         2)
             read -p "Sistemin Paketini Yükseltmek İstiyor musunuz ? e/h " systemListUpdatedResult
             if [[ $systemListUpdatedResult == "e" || $systemListUpdatedResult == "E" ]]; then
-                echo -e "Kernel Güncelleme Başladı ..."
-
-                # Geri Sayım
+                echo -e "Sistem Paket Güncellenmesi Başladı ..."
                 ./countdown.sh
-
-                # Güncelleme
                 sudo apt-get update && sudo apt-get upgrade -y
             else
-                echo -e "Güncelleme yapılmadı"
+                echo -e "Sistem Paket Güncellenmesi  yapılmadı..."
             fi
             ;; 
         3)
             read -p "Sistemin Çekirdeğini Güncellemek İstiyor musunuz ? e/h " kernelUpdatedResult
             if [[ $kernelUpdatedResult == "e" || $kernelUpdatedResult == "E" ]]; then
                 echo -e "Kernel Güncelleme Başladı ..."
-
-                # Geri Sayım
                 ./countdown.sh
-
-                # Güncelleme
                 sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y
                 # Çekirdek(Kernel) güncellemelerinde yeniden başlamak gerekebilir
                 sudo apt list --upgradable | grep linux-image
             else
-                echo -e "Güncelleme yapılmadı"
+                echo -e "Kernel Güncellemesi Yapılmadı..."
             fi
             ;;
         *)
             echo -e "Lütfen sadece size belirtilen seçeneği seçiniz"
+            ;;
+    esac
 }
 updated
 

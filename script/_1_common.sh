@@ -48,7 +48,7 @@ accessPermission() {
         sudo chmod +x _2_other_programming.sh
         sudo chmod +x docker_tomcat.sh
 
-        ./countdown.sh
+        sudo ./countdown.sh
     else
         echo -e "Dosya İzinleri Yapılmadı..."
     fi
@@ -127,112 +127,6 @@ logout() {
 }
 # logout
 
-###################################################################
-###################################################################
-# Install
-install() {
-    sleep 2
-    echo -e "\n###### ${INSTALL} ######  "
-    read -p "Sistem İçin Genel Yükleme İstiyor musunuz ? e/h " commonInstallResult
-    if [[ $commonInstallResult == "e" || $commonInstallResult == "E" ]]; then
-        echo -e "Genel Yükleme Başladı ..."
-        ./countdown.sh
-        echo -e "Bulunduğum dizin => $(pwd)\n"
-        sleep 1
-        sudo apt-get install vim -y
-        sleep 1
-        sudo apt-get install rar -y
-        sleep 1
-        sudo apt-get install unrar -y
-        sleep
-        sudo apt-get install curl -y
-        sleep 1
-        sudo apt-get install openssh-server -y
-        sleep 1
-        # build-essential: Temel Geliştirme araçları içeren meta-pakettir
-        sudo apt install build-essential wget zip unzip -y
-        # Firewall Function
-        theFirewallInstall
-        theFirewallDelete
-    else
-        echo -e "Sistem İçin Genel Yükleme Yapılmadı..."
-    fi
-}
-install
-
-# Packet Install
-# Install
-packageInstall() {
-    sleep 2
-    echo -e "\n###### ${INSTALL} ######  "
-    read -p "Sistem İçin Genel Paket Yüklemek İstiyor musunuz ? e/h " packageInstallResult
-    if [[ $packageInstallResult == "e" || $packageInstallResult == "E" ]]; then
-        echo -e "Genel Paket Yükleme Başladı ..."
-        ./countdown.sh
-        echo -e "Bulunduğum dizin => $(pwd)\n"
-        sleep 1
-        echo -e "######### Nginx #########\n"
-        # Nginx Check Package dependency Fonksiyonunu çağır
-        check_package
-
-        # Yükleme
-        sudo apt-get install nginx -y
-        sudo systemctl start nginx
-        sudo systemctl enable mginx
-        ./countdown.sh
-
-        #echo -e "######### nodejs #########\n"
-        #sudo apt install nodejs -y
-        #./countdown.sh
-
-        #echo -e "######### Brute Force  #########\n"
-        #sudo apt install fail2ban -y
-        #sudo systemctl start fail2ban
-        #sudo systemctl enable fail2ban
-        #./countdown.sh
-
-        echo -e "######### Monitoring  #########\n"
-        sudo apt install htop iftop net-tools -y
-
-        #echo -e "######### Python  #########\n"
-        #sudo apt install python3 python3-pip -y
-    else
-        echo -e "Sistem İçin Genel Paket Yüklemesi Yapılmadı..."
-    fi
-}
-packageInstall
-
-###################################################################
-###################################################################
-# Paket Bağımlıklarını Görme
-check_package() {
-    sleep 2
-    echo -e "\n###### ${CHECK} ######  "
-    read -p "Sistem İçin Genel Paket Yüklemek İstiyor musunuz ? e/h " checkResult
-    if [[ $checkResult == "e" || $checkResult == "E" ]]; then
-        echo -e "Yüklenecek Paket Bağımlılığı ..."
-        ./countdown.sh
-        echo -e "Bulunduğum dizin => $(pwd)\n"
-        sleep 1
-
-        echo -e "######### Paket Bağımlılığı #########\n"
-        read -p "Lütfen yüklemek istediğiniz paket adını yazınız examples: nginx" user_input
-
-        # dependency
-        dependency "$user_input"
-    else
-        echo -e "Paket Bağımlıklarını Yapılmadı..."
-    fi
-}
-
-dependency() {
-    # parametre - arguman
-    local packagename=$1
-    #
-    sudo apt-get check
-    sudo apt-cache depends $packagename
-    sudo apt-get install $packagename
-}
 
 ###################################################################
 ###################################################################
@@ -329,6 +223,115 @@ theFirewallDelete() {
     fi
 }
 #theFirewallDelete
+
+###################################################################
+###################################################################
+# Install
+install() {
+    sleep 2
+    echo -e "\n###### ${INSTALL} ######  "
+    read -p "Sistem İçin Genel Yükleme İstiyor musunuz ? e/h " commonInstallResult
+    if [[ $commonInstallResult == "e" || $commonInstallResult == "E" ]]; then
+        echo -e "Genel Yükleme Başladı ..."
+        ./countdown.sh
+        echo -e "Bulunduğum dizin => $(pwd)\n"
+        sleep 1
+        sudo apt-get install vim -y
+        sleep 1
+        sudo apt-get install rar -y
+        sleep 1
+        sudo apt-get install unrar -y
+        sleep
+        sudo apt-get install curl -y
+        sleep 1
+        sudo apt-get install openssh-server -y
+        sleep 1
+        # build-essential: Temel Geliştirme araçları içeren meta-pakettir
+        sudo apt install build-essential wget zip unzip -y
+        # Firewall Function
+        theFirewallInstall
+        theFirewallDelete
+    else
+        echo -e "Sistem İçin Genel Yükleme Yapılmadı..."
+    fi
+}
+install
+
+# Packet Install
+# Install
+packageInstall() {
+    sleep 2
+    echo -e "\n###### ${INSTALL} ######  "
+    read -p "Sistem İçin Genel Paket Yüklemek İstiyor musunuz ? e/h " packageInstallResult
+    if [[ $packageInstallResult == "e" || $packageInstallResult == "E" ]]; then
+        echo -e "Genel Paket Yükleme Başladı ..."
+        ./countdown.sh
+        echo -e "Bulunduğum dizin => $(pwd)\n"
+        sleep 1
+        echo -e "######### Nginx #########\n"
+        # Nginx Check Package dependency Fonksiyonunu çağır
+        check_package
+
+        # Yükleme
+        sudo apt-get install nginx -y
+        sudo systemctl start nginx
+        sudo systemctl enable nginx
+        ./countdown.sh
+
+        #echo -e "######### nodejs #########\n"
+        #sudo apt install nodejs -y
+        #./countdown.sh
+
+        #echo -e "######### Brute Force  #########\n"
+        #sudo apt install fail2ban -y
+        #sudo systemctl start fail2ban
+        #sudo systemctl enable fail2ban
+        #./countdown.sh
+
+        echo -e "######### Monitoring  #########\n"
+        sudo apt install htop iftop net-tools -y
+
+        #echo -e "######### Python  #########\n"
+        #sudo apt install python3 python3-pip -y
+    else
+        echo -e "Sistem İçin Genel Paket Yüklemesi Yapılmadı..."
+    fi
+}
+packageInstall
+
+###################################################################
+###################################################################
+# Paket Bağımlıklarını Görme
+check_package() {
+    sleep 2
+    echo -e "\n###### ${CHECK} ######  "
+    read -p "Sistem İçin Genel Paket Yüklemek İstiyor musunuz ? e/h " checkResult
+    if [[ $checkResult == "e" || $checkResult == "E" ]]; then
+        echo -e "Yüklenecek Paket Bağımlılığı ..."
+        ./countdown.sh
+        echo -e "Bulunduğum dizin => $(pwd)\n"
+        sleep 1
+
+        echo -e "######### Paket Bağımlılığı #########\n"
+        read -p "Lütfen yüklemek istediğiniz paket adını yazınız examples: nginx" user_input
+
+        # dependency
+        dependency "$user_input"
+    else
+        echo -e "Paket Bağımlıklarını Yapılmadı..."
+    fi
+}
+
+dependency() {
+    # parametre - arguman
+    local packagename=$1
+    #
+    sudo apt-get check
+    sudo apt-cache depends $packagename
+    sudo apt-get install $packagename
+}
+
+
 
 ###################################################################
 ###################################################################
