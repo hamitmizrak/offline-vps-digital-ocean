@@ -22,7 +22,7 @@ accessPermission() {
     read -p "Dosya İzinleri Vermek İstiyor musunuz ? e/h " permissionResult
     if [[ $permissionResult == "e" || $permissionResult == "E" ]]; then
         echo -e "Dosya izinleri Başladı ..."
-        ./countdown.sh
+        
         # chmod: Dosya ve dizinlerin erişimi için izinler
         # r: Okuma(read) 2^2=4
         # w: Yazma(Write) 2^1=2
@@ -47,6 +47,8 @@ accessPermission() {
         sudo chmod +x reboot.sh
         sudo chmod +x _2_other_programming.sh
         sudo chmod +x docker_tomcat.sh
+
+        ./countdown.sh
     else
         echo -e "Dosya İzinleri Yapılmadı..."
     fi
