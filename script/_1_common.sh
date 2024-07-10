@@ -64,7 +64,7 @@ updated() {
     echo -e "\n###### ${UPDATED} ######  "
     
     # Güncelleme Tercihi
-    echo -e "Güncelleme İçin Seçim Yapınız\n1-)update\n2-)upgrade\n3-)dist-upgrade"
+    echo -e "Güncelleme İçin Seçim Yapınız\n1-)update\n2-)upgrade\n3-)dist-upgrade\n4-)Çıkış"
     read chooise
 
     # Girilen sayıya göre tercih
@@ -73,7 +73,7 @@ updated() {
             read -p "Sistemin Listesini Güncellemek İstiyor musunuz ? e/h " listUpdatedResult
             if [[ $listUpdatedResult == "e" || $listUpdatedResult == "E" ]]; then
                 echo -e "List Güncelleme Başladı ..."
-                ./countdown.sh
+                sudo ./countdown.sh
                 sudo apt-get update
             else
                 echo -e "Sistemin Listesini Güncellenemesi yapılmadı"
@@ -83,7 +83,7 @@ updated() {
             read -p "Sistemin Paketini Yükseltmek İstiyor musunuz ? e/h " systemListUpdatedResult
             if [[ $systemListUpdatedResult == "e" || $systemListUpdatedResult == "E" ]]; then
                 echo -e "Sistem Paket Güncellenmesi Başladı ..."
-                ./countdown.sh
+                sudo ./countdown.sh
                 sudo apt-get update && sudo apt-get upgrade -y
             else
                 echo -e "Sistem Paket Güncellenmesi  yapılmadı..."
@@ -93,7 +93,7 @@ updated() {
             read -p "Sistemin Çekirdeğini Güncellemek İstiyor musunuz ? e/h " kernelUpdatedResult
             if [[ $kernelUpdatedResult == "e" || $kernelUpdatedResult == "E" ]]; then
                 echo -e "Kernel Güncelleme Başladı ..."
-                ./countdown.sh
+                sudo ./countdown.sh
                 sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y
                 # Çekirdek(Kernel) güncellemelerinde yeniden başlamak gerekebilir
                 sudo apt list --upgradable | grep linux-image
@@ -117,7 +117,7 @@ logout() {
     read -p "Sistemi Kapatıp Tekrar Açmak ister misiniz ? e/h " logoutResult
     if [[ $logoutResult == "e" || $logoutResult == "E" ]]; then
         echo -e "Sitem Kapatılıyor ..."
-        ./countdown.sh
+        sudo ./countdown.sh
         sudo apt update
         clean # Temizleme Fonkisyonunu çağırsın
         ./reboot.sh
@@ -137,7 +137,7 @@ theFirewallInstall() {
     read -p "Güvenlik Duvarı Kurulumlarını İster misiniz ? e/h " ufwResult
     if [[ $ufwResult == "e" || $ufwResult == "E" ]]; then
         echo -e "Güvenlik Duvarı Kuurlumları ,port izinler ve IP adres izinleri başladı ..."
-        ./countdown.sh
+        sudo ./countdown.sh
         netstat -nlptu
         sleep 3
         echo -e "######### UFW (Uncomplicated Firewall) #########\n"
@@ -186,7 +186,7 @@ theFirewallDelete() {
     read -p "Güvenlik Duvarı Kapatmak İster misiniz ? e/h " ufwCloseResult
     if [[ $ufwResufwCloseResultult == "e" || $ufwCloseResult == "E" ]]; then
         echo -e "Güvenlik Duvarı port,ip,gelen giden ağlar kapatılmaya  başladı ..."
-        ./countdown.sh
+        sudo ./countdown.sh
         netstat -nlptu
         sleep 3
         echo -e "######### UFW (Uncomplicated Firewall) #########\n"
@@ -233,7 +233,7 @@ install() {
     read -p "Sistem İçin Genel Yükleme İstiyor musunuz ? e/h " commonInstallResult
     if [[ $commonInstallResult == "e" || $commonInstallResult == "E" ]]; then
         echo -e "Genel Yükleme Başladı ..."
-        ./countdown.sh
+        sudo ./countdown.sh
         echo -e "Bulunduğum dizin => $(pwd)\n"
         sleep 1
         sudo apt-get install vim -y
@@ -265,7 +265,7 @@ packageInstall() {
     read -p "Sistem İçin Genel Paket Yüklemek İstiyor musunuz ? e/h " packageInstallResult
     if [[ $packageInstallResult == "e" || $packageInstallResult == "E" ]]; then
         echo -e "Genel Paket Yükleme Başladı ..."
-        ./countdown.sh
+        sudo ./countdown.sh
         echo -e "Bulunduğum dizin => $(pwd)\n"
         sleep 1
         echo -e "######### Nginx #########\n"
@@ -276,17 +276,17 @@ packageInstall() {
         sudo apt-get install nginx -y
         sudo systemctl start nginx
         sudo systemctl enable nginx
-        ./countdown.sh
+        sudo ./countdown.sh
 
         #echo -e "######### nodejs #########\n"
         #sudo apt install nodejs -y
-        #./countdown.sh
+        #sudo ./countdown.sh
 
         #echo -e "######### Brute Force  #########\n"
         #sudo apt install fail2ban -y
         #sudo systemctl start fail2ban
         #sudo systemctl enable fail2ban
-        #./countdown.sh
+        #sudo ./countdown.sh
 
         echo -e "######### Monitoring  #########\n"
         sudo apt install htop iftop net-tools -y
@@ -308,7 +308,7 @@ check_package() {
     read -p "Sistem İçin Genel Paket Yüklemek İstiyor musunuz ? e/h " checkResult
     if [[ $checkResult == "e" || $checkResult == "E" ]]; then
         echo -e "Yüklenecek Paket Bağımlılığı ..."
-        ./countdown.sh
+        sudo ./countdown.sh
         echo -e "Bulunduğum dizin => $(pwd)\n"
         sleep 1
 
@@ -342,7 +342,7 @@ information() {
     read -p "Genel Bilgileri Görmek ister misiniz ? e/h " informationResult
     if [[ $informationResult == "e" || $informationResult == "E" ]]; then
         echo -e "Genel Bilgiler Verilmeye Başlandı ..."
-        ./countdown.sh
+        sudo ./countdown.sh
         #sudo su
         echo -e "Ben Kimim => $(whoami)\n"
         sleep 1
@@ -376,7 +376,7 @@ clean() {
     read -p "Sistemde Gereksiz Paketleri Temizlemek İster misiniz ? e/h " cleanResult
     if [[ $cleanResult == "e" || $cleanResult == "E" ]]; then
         echo -e "Gereksiz Paket Temizliği Başladı ..."
-        ./countdown.sh
+        sudo ./countdown.sh
         echo -e "######### Clean #########\n"
         sudo apt-get autoremove -y
         sudo apt autoclean
@@ -409,12 +409,12 @@ portVersion
 # Clean
 # Install
 other_technology() {
-    ./countdown.sh
+    sudo ./countdown.sh
     echo -e "\n###### ${TECH} ######  "
     read -p "Sistem için Yüklemek İsteyeceğiniz Paketleri Yüklemek İster misiniz ? e/h " otherResult
     if [[ $otherResult == "e" || $otherResult == "E" ]]; then
         echo -e "Teknolojiler Yüklenmeye başlandı ..."
-        ./countdown.sh
+        sudo ./countdown.sh
         echo -e "######### Teknolojiler #########\n"
         ./_2_other_programming.sh
        

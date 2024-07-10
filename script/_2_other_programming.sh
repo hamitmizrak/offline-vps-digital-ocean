@@ -28,7 +28,7 @@ updated() {
     echo -e "\n###### ${UPDATED} ######  "
     
     # Güncelleme Tercihi
-    echo -e "Güncelleme İçin Seçim Yapınız\n1-)update\n2-)upgrade\n3-)dist-upgrade"
+    echo -e "Güncelleme İçin Seçim Yapınız\n1-)update\n2-)upgrade\n3-)dist-upgrade\n4-)Çıkış"
     read chooise
 
     # Girilen sayıya göre tercih
