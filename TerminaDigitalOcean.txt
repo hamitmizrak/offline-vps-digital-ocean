@@ -1,0 +1,4 @@
+cd /home 
+git clone https://github.com/hamitmizrak/offline-vps-digital-ocean
+
+chmod +x ./script/_1_common.sh

@@ -46,7 +46,6 @@ accessPermission() {
         sudo chmod +x countdown.sh
         sudo chmod +x reboot.sh
         sudo chmod +x _2_other_programming.sh
-        sudo chmod +x _2_other_programming.sh
         sudo chmod +x docker_tomcat.sh
     else
         echo -e "Dosya İzinleri Yapılmadı..."
@@ -265,8 +264,8 @@ theFirewallInstall() {
         sudo ufw allow 2222 # docker portainer
         sudo ufw allow 8000 # docker portainer
         sudo ufw allow 3333 # Jenkins
-        sudo ufw allow 3306
-        sudo ufw allow 5432
+        sudo ufw allow 3306 # mysql
+        sudo ufw allow 5432 # Postgresql
         sudo ufw allow 8080
         sudo ufw allow 9000
         sudo ufw allow 9090
@@ -373,7 +372,7 @@ clean() {
     if [[ $cleanResult == "e" || $cleanResult == "E" ]]; then
         echo -e "Gereksiz Paket Temizliği Başladı ..."
         ./countdown.sh
-        echo -e "######### nginx #########\n"
+        echo -e "######### Clean #########\n"
         sudo apt-get autoremove -y
         sudo apt autoclean
         echo -e "Kırık Bağımlılıkları Yükle ..."
@@ -395,9 +394,9 @@ portVersion() {
     gcc --version # gcc: GNU C compiler derlemek
     g++ --version # g++: GNU C++ compiler derlemek
     make --version # make: Makefile kullanarak derlemek içindir
-    #java --version
-    #git --version
-    #docker-compose -v
+    java --version
+    git --version
+    docker-compose -v
 }
 portVersion
 
