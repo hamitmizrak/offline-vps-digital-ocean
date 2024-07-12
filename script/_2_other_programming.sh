@@ -448,6 +448,7 @@ mavenInstall
 ###################################################################
 ###################################################################
 # JENKINS Packet Install
+# http://localhost:3333
 # Jenkins Delete
 jenkinsDelete() {
      # Güncelleme Fonksiyonu
@@ -492,7 +493,7 @@ jenkinsDelete() {
         # VSCODE Check Package dependency Fonksiyonunu çağır
         check_package
     else
-        echo -e "Maven Yüklenmesi Yapılmadı...."
+        echo -e "Jenkins Silme İşlemi Yapılmadı...."
     fi
 }
 
@@ -546,8 +547,7 @@ jenkinsInstall() {
         sudo systemctl start jenkins
         sudo systemctl restart jenkins
         # sudo systemctl stop jenkins
-        sudo systemctl status jenkins
-        sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+        sudo systemctl status Jenkins
 
          # Geri Sayım
         sudo ./countdown.sh
@@ -573,7 +573,7 @@ jenkinsInstall() {
         # VSCODE Check Package dependency Fonksiyonunu çağır
         check_package
     else
-        echo -e "Maven Yüklenmesi Yapılmadı...."
+        echo -e "Jenkins Yüklenmesi Yapılmadı...."
     fi
 }
 jenkinsInstall
@@ -584,6 +584,7 @@ jenkinsDelete
 ###################################################################
 ###################################################################
 # Apache Tomcat Packet Install
+# http://localhost:4444
 # Tomcat Delete
 apacheTomcatDelete() {
      # Güncelleme Fonksiyonu
@@ -729,90 +730,6 @@ apacheTomcatInstall
 
 # Tomcat Silmek
 apacheTomcatDelete
-
-###################################################################
-###################################################################
-# Postgresql Packet Install
-postgresql(){
-   
-    echo -e "\n### ${POSTGRESQL} Kurulumu ###"
-    read -p "\nPostgresql Eklemek İstiyor musunuz ? E/H? " postgresqlResult
-    if [[ $postgresqlResult == "E" || $postgresqlResult == "e"  ]]
-    then
-        echo -e "Postgresql Ekleniyor ... " 
-         # Geri Sayım
-        sudo ./countdown.sh
-        sudo ufw allow 5432
-
-        sleep 2
-        # sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
-        echo -e "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main " | sudo tee --append /etc/apt/sources.list.d/pgdg.list
-        sudo wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -
-        sudo apt-get -y install postgresql postgresql-contrib
-
-        sleep 2
-        echo -e "######Postgresql Enable"
-        sudo systemctl enable postgresql
-
-        sleep 2
-        echo -e "Postgresql Start"
-        sudo systemctl start postgresql
-
-        # PostgreSQL için kullanılacak yeni parola
-        NEW_PASSWORD="sonarqube"
-        # PostgreSQL kullanıcısının parolasını değiştirme
-        sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD '$NEW_PASSWORD';"
-
-        # Parolanın değiştirildiğini doğrulama
-        RESULT=$(sudo -u postgres psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='postgres' AND rolpassword IS NOT NULL;")
-
-        if [ "$RESULT" == "1" ]; then
-            echo "PostgreSQL kullanıcısının parolası başarıyla değiştirildi."
-        else
-            echo "PostgreSQL kullanıcısının parolası değiştirilemedi."
-        fi
-
-        su - postgres
-        createuser sonar
-        psql
-        ALTER USER sonar WITH ENCRYPTED password 'sonar';
-        CREATE DATABASE sonarqube OWNER sonar;
-        grant all privileges on DATABASE sonarqube to sonar;
-        \q
-        exit
-
-        sleep 2
-        echo -e "5432 PORT"
-        sudo netstat -ntlp | grep 5432
-        sudo netstat -nlptu
-        
-        # Geri Sayım
-        sudo ./countdown.sh
-      
-    else
-        echo -e "Postgresql Kurulumu Yapılmadı!!!\n "   
-    fi
-}
-postgresql
-
-###################################################################
-###################################################################
-# Psotgresql Packet Install
-sonarqube(){
-   
-    echo -e "\n### ${SONARQUBE} Kurulumu ###"
-    read -p "\nSonarQube İstiyor musunuz ? E/H? " sonarqubeResult
-    if [[ $sonarqubeResult == "E" || $sonarqubeResult == "e"  ]]
-    then
-        echo -e "SonarQube Ekleniyor ... " 
-         # Geri Sayım
-        sudo ./countdown.sh
-      
-    else
-        echo -e "SonarQube Kurulumu Yapılmadı!!!\n "   
-    fi
-}
-sonarqube
 
 
 ###################################################################
@@ -1118,6 +1035,91 @@ dockerInstall() {
     fi
 }
 dockerInstall
+
+
+###################################################################
+###################################################################
+# Postgresql Packet Install
+postgresql(){
+   
+    echo -e "\n### ${POSTGRESQL} Kurulumu ###"
+    read -p "\nPostgresql Eklemek İstiyor musunuz ? E/H? " postgresqlResult
+    if [[ $postgresqlResult == "E" || $postgresqlResult == "e"  ]]
+    then
+        echo -e "Postgresql Ekleniyor ... " 
+         # Geri Sayım
+        sudo ./countdown.sh
+        sudo ufw allow 5432
+
+        sleep 2
+        # sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
+        echo -e "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main " | sudo tee --append /etc/apt/sources.list.d/pgdg.list
+        sudo wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -
+        sudo apt-get -y install postgresql postgresql-contrib
+
+        sleep 2
+        echo -e "######Postgresql Enable"
+        sudo systemctl enable postgresql
+
+        sleep 2
+        echo -e "Postgresql Start"
+        sudo systemctl start postgresql
+
+        # PostgreSQL için kullanılacak yeni parola
+        NEW_PASSWORD="sonarqube"
+        # PostgreSQL kullanıcısının parolasını değiştirme
+        sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD '$NEW_PASSWORD';"
+
+        # Parolanın değiştirildiğini doğrulama
+        RESULT=$(sudo -u postgres psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='postgres' AND rolpassword IS NOT NULL;")
+
+        if [ "$RESULT" == "1" ]; then
+            echo "PostgreSQL kullanıcısının parolası başarıyla değiştirildi."
+        else
+            echo "PostgreSQL kullanıcısının parolası değiştirilemedi."
+        fi
+
+        su - postgres
+        createuser sonar
+        psql
+        ALTER USER sonar WITH ENCRYPTED password 'sonar';
+        CREATE DATABASE sonarqube OWNER sonar;
+        grant all privileges on DATABASE sonarqube to sonar;
+        \q
+        exit
+
+        sleep 2
+        echo -e "5432 PORT"
+        sudo netstat -ntlp | grep 5432
+        sudo netstat -nlptu
+        
+        # Geri Sayım
+        sudo ./countdown.sh
+      
+    else
+        echo -e "Postgresql Kurulumu Yapılmadı!!!\n "   
+    fi
+}
+postgresql
+
+###################################################################
+###################################################################
+# Psotgresql Packet Install
+sonarqube(){
+   
+    echo -e "\n### ${SONARQUBE} Kurulumu ###"
+    read -p "\nSonarQube İstiyor musunuz ? E/H? " sonarqubeResult
+    if [[ $sonarqubeResult == "E" || $sonarqubeResult == "e"  ]]
+    then
+        echo -e "SonarQube Ekleniyor ... " 
+         # Geri Sayım
+        sudo ./countdown.sh
+      
+    else
+        echo -e "SonarQube Kurulumu Yapılmadı!!!\n "   
+    fi
+}
+sonarqube
 
 ###################################################################
 ###################################################################
