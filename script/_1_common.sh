@@ -177,11 +177,11 @@ theFirewallInstall() {
         sudo ufw allow 22
         sudo ufw allow 80
         sudo ufw allow 443
-        sudo ufw allow 1111 # Apache Tomcat - Docker 
+        sudo ufw allow 1111 # Docker Apache Tomcat 
         sudo ufw allow 2222 # docker portainer
         sudo ufw allow 8000 # docker portainer
         sudo ufw allow 3333 # Jenkins
-        sudo ufw allow 4444 # Tomcat
+        sudo ufw allow 4444 # Ubuntu Tomcat
         sudo ufw allow 3306 # mysql
         sudo ufw allow 5432 # Postgresql
         sudo ufw allow 8080 # Genel Port
