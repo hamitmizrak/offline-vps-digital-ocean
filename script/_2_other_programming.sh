@@ -18,8 +18,6 @@ LOGOUT="Docker Logout"
 PORTAINER="Docker Portainer"
 DOCKERCOMPOSE="Docker Compose"
 
-
-
 ###################################################################
 ###################################################################
 # Updated
@@ -34,10 +32,12 @@ updated() {
     # Girilen sayıya göre tercih
     case $chooise in
         1)
-            read -p "Sistemin Listesini Güncellemek İstiyor musunuz ? e/h " listUpdatedResult
+            read -p "Sistem Listesini Güncellemek İstiyor musunuz ? e/h " listUpdatedResult
             if [[ $listUpdatedResult == "e" || $listUpdatedResult == "E" ]]; then
                 echo -e "List Güncelleme Başladı ..."
+                # Geriye Say
                 sudo ./countdown.sh
+
                 sudo apt-get update
             else
                 echo -e "Sistemin Listesini Güncellenemesi yapılmadı"
@@ -47,7 +47,9 @@ updated() {
             read -p "Sistemin Paketini Yükseltmek İstiyor musunuz ? e/h " systemListUpdatedResult
             if [[ $systemListUpdatedResult == "e" || $systemListUpdatedResult == "E" ]]; then
                 echo -e "Sistem Paket Güncellenmesi Başladı ..."
+                # Geriye Say
                 sudo ./countdown.sh
+
                 sudo apt-get update && sudo apt-get upgrade -y
             else
                 echo -e "Sistem Paket Güncellenmesi  yapılmadı..."
@@ -57,7 +59,9 @@ updated() {
             read -p "Sistemin Çekirdeğini Güncellemek İstiyor musunuz ? e/h " kernelUpdatedResult
             if [[ $kernelUpdatedResult == "e" || $kernelUpdatedResult == "E" ]]; then
                 echo -e "Kernel Güncelleme Başladı ..."
+                # Geriye Say
                 sudo ./countdown.sh
+
                 sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y
                 # Çekirdek(Kernel) güncellemelerinde yeniden başlamak gerekebilir
                 sudo apt list --upgradable | grep linux-image
@@ -66,7 +70,7 @@ updated() {
             fi
             ;;
         *)
-            echo -e "Lütfen sadece size belirtilen seçeneği seçiniz"
+            echo -e "Lütfen Sadece Size Belirtilen Seçeneği Seçiniz"
             ;;
     esac
 }
@@ -87,7 +91,11 @@ logout() {
 
         # Update
         sudo apt update
-        clean # Temizleme Fonkisyonunu çağırsın
+
+        # Temizleme Fonkisyonunu çağırsın
+        clean
+
+        # Sistemi kapat ve ac
         ./reboot.sh
     else
         echo -e "Sistem Kapatılmadı"
@@ -297,6 +305,7 @@ vsCodeInstall() {
         sudo snap install code --classic
         sleep 1
 
+        # Dizin oluştur
         sudo mkdir frontend
         cd frontend
         code .
@@ -318,6 +327,7 @@ vsCodeInstall
 ###################################################################
 ###################################################################
 # JAVA JDK Packet Install
+# JDK 11 : Jenkins, SonarQube(11 veya 17),  Apache Tomcat 10 (+Java 8)
 # Install
 jdkInstall() {
      # Güncelleme Fonksiyonu
@@ -444,17 +454,17 @@ apacheTomcatInstall() {
     if [[ $apacheTomcatInstallResult == "e" || $apacheTomcatInstallResult == "E" ]]; then
         echo -e "APACHE TOMCAT Paket Yükleme Başladı ..."
 
+        # Yükleme
+        java --version 
+        javac --version
+        mvn --version
+
         # Geri Sayım
         sudo ./countdown.sh
 
         echo -e "Bulunduğum dizin => $(pwd)\n"
         sleep 1
         echo -e "######### APACHE TOMCAT #########\n"
-
-        # Yükleme
-        java --version 
-        javac --version
-        mvn --version
 
         #sudo update-alternative --config java
 
@@ -468,6 +478,7 @@ apacheTomcatInstall() {
         sudo mkdir /opt/tomcat/
         sudo mv apache-tomcat-10.0.8/* /opt/tomcat/
         sudo chown -R www-data:www-data /opt/tomcat/
+
         # İzinleri Sembolik Mod olarak değiştirmek
         #sudo chmod -R u+rwx,g+rx,o+rx /opt/tomcat/
         sudo chmod -R 755 /opt/tomcat/
@@ -490,6 +501,9 @@ apacheTomcatInstall() {
 
         # Tomcat Version
         /opt/tomcat/bin/catalina.sh version 
+
+         # Geri Sayım
+        sudo ./countdown.sh
         
         echo -e "######### Version #########\n"
         which git
@@ -516,6 +530,177 @@ apacheTomcatInstall
 
 ###################################################################
 ###################################################################
+# Docker Compose
+dockerCompose(){
+   
+    echo -e "\n### ${DOCKERCOMPOSE} ###"
+    read -p "\nDocker Compose Eklemek İstiyor musunuz ? E/H? " dockerComposeResult
+    if [[ $dockerComposeResult == "E" || $dockerComposeResult == "e"  ]]
+    then
+        echo -e "Docker Compose Ekleniyor ... " 
+         # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "Docker Tek bir satırda kurmak için aşağıdaki kodu kullanabilirsiniz: sudo curl -Ssl https://get.docker.com | bash - \n "  
+
+        # Docker Kurulumunu Tek satırda çalıştırmak
+        #sudo curl -Ssl https://get.docker.com | bash -
+
+         # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "Docker-compose Kurulumu Başladı "  
+
+        # Docker Compose Kurulumu
+        sudo apt-get install docker-compose -y
+
+        docker-compose -v
+      
+    else
+        echo -e "Docker Compose Ekleme Yapılmadı!!!\n "   
+    fi
+}
+
+# Docker Portainer
+dockerPortainer(){
+    # Geri Sayım
+    sudo ./countdown.sh
+
+    echo -e "\n### ${PORTAINER} ###"
+    read -p "\nDockerHub'a Çıkış yapmak istiyor musunuz ? E/H? " portainerResult
+    if [[ $portainerResult == "E" || $portainerResult == "e"  ]]
+    then
+        echo -e "Docker Portainer ... "  
+         # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "Docker Portainer Kurulum Başladı " 
+        ##### Aşağıdaki kodları yaz ##########################################
+        sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+
+        # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "Docker Portainer CHMOD " 
+        ##### CHMOD ##########################################
+        sudo chmod +x /usr/local/bin/docker-compose
+        sudo docker volume create portainer_data
+
+        ##### PORT##########################################
+        # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "Docker Portainer Port "
+        sudo docker run -d -p 2222:9000 -p 8000:8000 --name portainer --restart always -v /var/run/docker.sock:/var/run/docker.sock -v /srv/portainer:/data portainer/portainer
+        # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "Docker Portainer Start "
+        sudo docker start portainer
+        #sudo docker stop portainer
+
+        ##### CHMOD ##########################################
+        sudo ifconfig
+        # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "Docker Portainer http:localhost:2222"
+        sudo curl localhost:2222 
+
+        # username:root
+        # password:rootroot
+
+    else
+        echo -e "Docker Portainer Ekleme Yapılmadı!!!\n "   
+    fi
+}
+
+# Docker Pulling
+dockerPulling() {
+
+    echo -e "\n### ${DOCKER_PULL} ###"
+    read -p "\nDockerHub'a Pull  yapmak istiyor musunuz ? E/H? " updatedResult
+    if [[ $updatedResult == "E" || $updatedResult == "e"  ]]
+    then
+        echo -e "Docker Pulling ... " 
+        # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "Docker Pulling nginx" 
+        sudo docker pull nginx
+        # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "Docker Pulling nodejs"
+        sudo docker pull node # nodejs
+        # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "Docker Pulling Httpd" 
+        sudo docker pull httpd # apache
+        # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "Docker Pulling tomcat:9.0.8-jre8-alpine" 
+        docker pull tomcat:9.0.8-jre8-alpine
+        # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "Docker Pulling mysql" 
+        sudo docker pull mysql
+        # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "Docker Pulling postgres" 
+        sudo docker pull postgres
+        # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "Docker Pulling mongo"
+        sudo docker pull mongo # nosql
+        # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "Docker Pulling redis"
+        sudo docker pull redis
+        # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "Docker Pulling ubuntu"
+        sudo docker pull ubuntu
+        # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "Docker Pulling alpine"
+        sudo docker pull alpine
+        # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "Docker Pulling centos"
+        sudo docker pull centos
+        # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "Docker Pulling python"
+        sudo docker pull python:3.8
+        docker images
+    else
+        echo -e "apt-get Update List Güncelleme Yapılmadı!!!\n "   
+    fi
+}
+
+# dockerHubLogin
+dockerHubLogin() {
+    echo -e "\n### ${LOGIN} ###"
+    read -p "\nDockerHub'a Giriş yapmak istiyor musunuz ? E/H? " updatedResult
+    if [[ $updatedResult == "E" || $updatedResult == "e"  ]]
+    then
+        # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "Docker Login ... "  
+        sudo docker login
+    else
+        echo -e "Docker Login Yapılmadı!!!\n "   
+    fi
+}
+
+# dockerHubLogout
+dockerHubLogout() {
+
+    echo -e "\n### ${LOGOUT} ###"
+    read -p "\nDockerHub'a Çıkış yapmak istiyor musunuz ? E/H? " updatedResult
+    if [[ $updatedResult == "E" || $updatedResult == "e"  ]]
+    then
+        # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "Docker Login ... "  
+        sudo docker logout
+    else
+        echo -e "Docker Logout Yapılmadı!!!\n "   
+    fi
+}
+
 # Docker Packet Install
 # Install
 dockerInstall() {
@@ -527,29 +712,25 @@ dockerInstall() {
     sudo ./countdown.sh
 
     echo -e "\n###### ${INSTALL} ######  "
-    read -p "DOCKER Paketini Yüklemek İstiyor musunuz ? e/h " dockerInstallResult
+    read -p "Docker Paketini Yüklemek İstiyor musunuz ? e/h " dockerInstallResult
     if [[ $dockerInstallResult == "e" || $dockerInstallResult == "E" ]]; then
-        echo -e "Docker Paket Yükleme Başladı ..."
+        echo -e "Docker Paket Yükleme Başladı ... "
+
+        # Yükleme
+        git --version 
+        #sudo update-alternative --config java
+        java --version 
+        javac --version
+        mvn --version
 
         # Geri Sayım
         sudo ./countdown.sh
 
         echo -e "Bulunduğum dizin => $(pwd)\n"
         sleep 1
-        echo -e "######### DOCKER #########\n"
-
-        # Yükleme
-        git --version 
-        java --version 
-        javac --version
-        mvn --version
-        #sudo update-alternative --config java
-
-        # Geri Sayım
-        sudo ./countdown.sh
-
+        echo -e "######### Docker Sürümünü Eğer Varsa Öncelikle Sil #########\n"
         # Docker Kurulumu
-         # Eğer önceden Docker varsa sil
+        # Eğer önceden Docker varsa sil
         sudo apt-get purge docker-ce docker-ce-cli containerd.io -y
         sudo rm -rf /var/lib/docker
         sudo rm -rf /var/lib/containerd
@@ -560,27 +741,45 @@ dockerInstall() {
         sudo apt-get update
         sudo apt-get upgrade
 
+        # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "######### Docker Https Üzerinden Depo İznini Ver#########\n"
          ### HTTPS üzerinden bir depo kullanmasına izin vermek için##################################
         sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y
 
+        # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "######### Docker Resmi GPG Anahtarını Ekle #########\n"
         ### Docker’ın resmi GPG anahtarını ekleyiniz. curl aracı ile GPG anahtarını komut içerisine aktarınız
         sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
         sudo apt-key fingerprint 0EBFCD88
 
+        # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "######### Docker Curl Araçını Docker Apt Deposuna Ekle #########\n"
         ### curl aracı ile Docker apt deposunu eklemek
         sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
         ###############DOCKER KURULUMU##########################################
+        # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "######### Docker Kurulumuna Başla #########\n"
         sudo apt-get update
         sudo apt-get install docker-ce docker-ce-cli containerd.io -y
 
         # sudo systemctl status docker
         # sleep 2
         # q
+        # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "######### Docker Enable/Start #########\n"
         sudo systemctl enable --now docker 
         sudo systemctl start docker
         # sudo systemctl status docker
 
+        # Geri Sayım
+        sudo ./countdown.sh
+        echo -e "######### Docker User Mod Ekle #########\n"
         ### kullanıcı adınızı docker grubuna ekle
         sudo usermod -aG docker ${USER}
         su - ${USER}
@@ -590,6 +789,12 @@ dockerInstall() {
 
         # Docker Image Oluştursun
         docker run hello-world
+
+        # Docker Compose 
+        dockerCompose
+
+        # Docker Linux Ubuntu Portainer
+        dockerPortainer
         
          # Geri Sayım
         sudo ./countdown.sh
@@ -602,12 +807,6 @@ dockerInstall() {
 
         # DockerHub Logout 
         dockerHubLogout
-
-        # Docker Compose 
-        dockerCompose
-
-        # Docker Linux Ubuntu Portainer
-        dockerPortainer
 
         # Version
         echo -e "######### Version #########\n"
@@ -633,117 +832,6 @@ dockerInstall() {
 }
 dockerInstall
 
-# Docker Pulling
-dockerPulling() {
-     # Geri Sayım
-    sudo ./countdown.sh
-
-    echo -e "\n### ${DOCKER_PULL} ###"
-    read -p "\nDockerHub'a Pull  yapmak istiyor musunuz ? E/H? " updatedResult
-    if [[ $updatedResult == "E" || $updatedResult == "e"  ]]
-    then
-        echo -e "Docker Pulling ... "  
-        sudo docker pull nginx
-        sudo docker pull httpd # apache
-        docker pull tomcat:9.0.8-jre8-alpine
-        sudo docker pull mysql
-        sudo docker pull postgres
-        sudo docker pull ubuntu
-        sudo docker pull alpine
-        sudo docker pull centos
-        sudo docker pull node # nodejs
-        sudo docker pull mongo # nosql
-        sudo docker pull redis
-        sudo docker pull python:3.8
-        docker images
-    else
-        echo -e "apt-get Update List Güncelleme Yapılmadı!!!\n "   
-    fi
-}
-
-# dockerHubLogin
-dockerHubLogin() {
-    # Geri Sayım
-    sudo ./countdown.sh
-
-    echo -e "\n### ${LOGIN} ###"
-    read -p "\nDockerHub'a Giriş yapmak istiyor musunuz ? E/H? " updatedResult
-    if [[ $updatedResult == "E" || $updatedResult == "e"  ]]
-    then
-        echo -e "Docker Login ... "  
-        sudo docker login
-    else
-        echo -e "apt-get Update List Güncelleme Yapılmadı!!!\n "   
-    fi
-}
-
-# dockerHubLogout
-dockerHubLogout() {
-    # Geri Sayım
-    sudo ./countdown.sh
-
-    echo -e "\n### ${LOGOUT} ###"
-    read -p "\nDockerHub'a Çıkış yapmak istiyor musunuz ? E/H? " updatedResult
-    if [[ $updatedResult == "E" || $updatedResult == "e"  ]]
-    then
-        echo -e "Docker Login ... "  
-        sudo docker logout
-    else
-        echo -e "apt-get Update List Güncelleme Yapılmadı!!!\n "   
-    fi
-}
-
-# Docker Portainer
-dockerPortainer(){
-    # Geri Sayım
-    sudo ./countdown.sh
-
-    echo -e "\n### ${PORTAINER} ###"
-    read -p "\nDockerHub'a Çıkış yapmak istiyor musunuz ? E/H? " portainerResult
-    if [[ $portainerResult == "E" || $portainerResult == "e"  ]]
-    then
-        echo -e "Docker Portainer ... "  
-        ##### Aşağıdaki kodları yaz ##########################################
-        sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
-
-        ##### CHMOD ##########################################
-        sudo chmod +x /usr/local/bin/docker-compose
-        sudo docker volume create portainer_data
-
-        ##### PORT##########################################
-        sudo docker run -d -p 2222:9000 -p 8000:8000 --name portainer --restart always -v /var/run/docker.sock:/var/run/docker.sock -v /srv/portainer:/data portainer/portainer
-        sudo docker start portainer
-        sudo docker stop portainer
-
-        ##### CHMOD ##########################################
-        ifconfig
-        sudo curl localhost:2222 
-
-        # username:root
-        # password:rootroot
-
-    else
-        echo -e "Docker Portainer Ekleme Yapılmadı!!!\n "   
-    fi
-}
-
-# Docker Compose
-dockerCompose(){
-    # Geri Sayım
-    sudo ./countdown.sh
-
-    echo -e "\n### ${DOCKERCOMPOSE} ###"
-    read -p "\nDocker Compose Eklemek İstiyor musunuz ? E/H? " dockerComposeResult
-    if [[ $dockerComposeResult == "E" || $dockerComposeResult == "e"  ]]
-    then
-        echo -e "Docker Compose Ekleniyor ... "  
-      
-    else
-        echo -e "Docker Compose Ekleme Yapılmadı!!!\n "   
-    fi
-}
-
-
 ###################################################################
 ###################################################################
 # Information
@@ -756,7 +844,6 @@ information() {
 
         # Geri Sayım
         sudo ./countdown.sh
-
         #sudo su
         echo -e "Ben Kimim => $(whoami)\n"
         sleep 1
@@ -768,7 +855,7 @@ information() {
         sleep 1
         echo -e "Dağıtım Bilgileri => $(lsb_release -a)\n"
         sleep 1
-        echo -e "HDD Disk Bilgileri => $(df -m)\n"
+        echo -e "Hardisk Bilgileri => $(df -m)\n"
         sleep 1
         echo -e "CPU Bilgileri => $(cat /proc/cpuinfo)\n"
         sleep 1
@@ -779,8 +866,6 @@ information() {
     fi
 }
 information
-
-
 
 ###################################################################
 ###################################################################
@@ -797,11 +882,12 @@ portVersion() {
     java --version
     javac --version
     mvn --version
+    
+     # docker Version
+    docker-compose -v
 
     # Tomcat Version
     /opt/tomcat/bin/catalina.sh version 
 
-    # docker Version
-    #docker-compose -v
 }
 portVersion

@@ -21,7 +21,7 @@ accessPermission() {
     echo -e "\n###### ${CHMOD} ######  "
     read -p "Dosya İzinleri Vermek İstiyor musunuz ? e/h " permissionResult
     if [[ $permissionResult == "e" || $permissionResult == "E" ]]; then
-        echo -e "Dosya izinleri Başladı ..."
+        echo -e "Dosya izinleri Başladı ... "
         
         # chmod: Dosya ve dizinlerin erişimi için izinler
         # r: Okuma(read) 2^2=4
@@ -36,19 +36,22 @@ accessPermission() {
         ls -al
         ls -l countdown.sh
         ls -l reboot.sh
+
         # İzinleri Sembolik Mod olarak değiştirmek
         chmod u+rwx,g+rx,o+rx ./script
 
         # İzinleri Sayısal Mod olarak değiştirmek
-        chmod 755 ./script
+        chmod 755 ../script
 
         # Bash scriptlere izin vermek
-        sudo chmod +x countdown.sh
-        sudo chmod +x reboot.sh
-        sudo chmod +x _2_other_programming.sh
-        sudo chmod +x docker_tomcat.sh
+        sudo chmod +x ./countdown.sh
+        sudo chmod +x ./reboot.sh
+        sudo chmod +x ./_2_other_programming.sh
+        sudo chmod +x ./docker_tomcat.sh
 
+         # Geriye Say
         sudo ./countdown.sh
+ 
     else
         echo -e "Dosya İzinleri Yapılmadı..."
     fi
@@ -64,41 +67,48 @@ updated() {
     echo -e "\n###### ${UPDATED} ######  "
     
     # Güncelleme Tercihi
-    echo -e "Güncelleme İçin Seçim Yapınız\n1-)update\n2-)upgrade\n3-)dist-upgrade\n4-)Çıkış"
+    echo -e "Güncelleme İçin Seçim Yapınız\n1-)update\n2-)upgrade\n3-)dist-upgrade\n4-)Çıkış "
     read chooise
 
     # Girilen sayıya göre tercih
     case $chooise in
         1)
-            read -p "Sistemin Listesini Güncellemek İstiyor musunuz ? e/h " listUpdatedResult
+            read -p "Sistem Listesini Güncellemek İstiyor musunuz ? e/h " listUpdatedResult
             if [[ $listUpdatedResult == "e" || $listUpdatedResult == "E" ]]; then
-                echo -e "List Güncelleme Başladı ..."
+                echo -e "List Güncelleme Başladı ... "
+
+                 # Geriye Say
                 sudo ./countdown.sh
+
+                # Güncelle
                 sudo apt-get update
             else
                 echo -e "Sistemin Listesini Güncellenemesi yapılmadı"
             fi
             ;; 
         2)
-            read -p "Sistemin Paketini Yükseltmek İstiyor musunuz ? e/h " systemListUpdatedResult
+            read -p "Sistem Paketini Yükseltmek İstiyor musunuz ? e/h " systemListUpdatedResult
             if [[ $systemListUpdatedResult == "e" || $systemListUpdatedResult == "E" ]]; then
                 echo -e "Sistem Paket Güncellenmesi Başladı ..."
                 sudo ./countdown.sh
                 sudo apt-get update && sudo apt-get upgrade -y
             else
-                echo -e "Sistem Paket Güncellenmesi  yapılmadı..."
+                echo -e "Sistem Paket Güncellenmesi Yapılmadı... "
             fi
             ;; 
         3)
             read -p "Sistemin Çekirdeğini Güncellemek İstiyor musunuz ? e/h " kernelUpdatedResult
             if [[ $kernelUpdatedResult == "e" || $kernelUpdatedResult == "E" ]]; then
-                echo -e "Kernel Güncelleme Başladı ..."
+                echo -e "Kernel Güncelleme Başladı ... "
+
+                 # Geriye Say
                 sudo ./countdown.sh
+ 
                 sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y
                 # Çekirdek(Kernel) güncellemelerinde yeniden başlamak gerekebilir
                 sudo apt list --upgradable | grep linux-image
             else
-                echo -e "Kernel Güncellemesi Yapılmadı..."
+                echo -e "Kernel Güncellemesi Yapılmadı... "
             fi
             ;;
         *)
@@ -116,10 +126,16 @@ logout() {
     echo -e "\n###### ${LOGOUT} ######  "
     read -p "Sistemi Kapatıp Tekrar Açmak ister misiniz ? e/h " logoutResult
     if [[ $logoutResult == "e" || $logoutResult == "E" ]]; then
-        echo -e "Sitem Kapatılıyor ..."
+        echo -e "Sitem Kapatılıyor ... "
+        
+         # Geriye Say
         sudo ./countdown.sh
+
+        #Güncelle
         sudo apt update
-        clean # Temizleme Fonkisyonunu çağırsın
+
+        # Temizleme Fonkisyonunu çağırsın
+        clean 
         ./reboot.sh
     else
         echo -e "Sistem Kapatılmadı..."
@@ -136,9 +152,14 @@ theFirewallInstall() {
     echo -e "\n###### ${UFW} ######  "
     read -p "Güvenlik Duvarı Kurulumlarını İster misiniz ? e/h " ufwResult
     if [[ $ufwResult == "e" || $ufwResult == "E" ]]; then
-        echo -e "Güvenlik Duvarı Kuurlumları ,port izinler ve IP adres izinleri başladı ..."
+        echo -e "Güvenlik Duvarı Kurumları Port İzinler ve IP adres İzinleri Başladı ..."
+       
+         # Geriye Say
         sudo ./countdown.sh
+
+        # Portları izle
         netstat -nlptu
+
         sleep 3
         echo -e "######### UFW (Uncomplicated Firewall) #########\n"
         # UFW kurulumu
@@ -162,9 +183,9 @@ theFirewallInstall() {
         sudo ufw allow 3333 # Jenkins
         sudo ufw allow 3306 # mysql
         sudo ufw allow 5432 # Postgresql
-        sudo ufw allow 8080
-        sudo ufw allow 9000
-        sudo ufw allow 9090
+        sudo ufw allow 8080 # Genel Port
+        sudo ufw allow 9000 # SonarQube
+        sudo ufw allow 9090 
         # IP: 127.0.0.1 DNS: localhost
         sudo ufw allow from 127.0.0.1 to any port 8080
 
@@ -174,7 +195,7 @@ theFirewallInstall() {
         # UFW Status
         sudo ufw status
     else
-        echo -e "Güvenlik Duvarı Açılmadı..."
+        echo -e "Güvenlik Duvarı Açılmadı... "
     fi
 }
 #theFirewallInstall
@@ -186,8 +207,13 @@ theFirewallDelete() {
     read -p "Güvenlik Duvarı Kapatmak İster misiniz ? e/h " ufwCloseResult
     if [[ $ufwResufwCloseResultult == "e" || $ufwCloseResult == "E" ]]; then
         echo -e "Güvenlik Duvarı port,ip,gelen giden ağlar kapatılmaya  başladı ..."
+
+         # Geriye Say
         sudo ./countdown.sh
+
+        # Portları izlemek
         netstat -nlptu
+
         sleep 3
         echo -e "######### UFW (Uncomplicated Firewall) #########\n"
         # UFW Status
@@ -226,14 +252,54 @@ theFirewallDelete() {
 
 ###################################################################
 ###################################################################
+# Paket Bağımlıklarını Görme
+check_package() {
+    sleep 2
+    echo -e "\n###### ${CHECK} ######  "
+    read -p "Sistem İçin Paket Bağımlılıklarını Yüklemek İstiyor musunuz ? e/h " checkResult
+    if [[ $checkResult == "e" || $checkResult == "E" ]]; then
+        echo -e "Yüklenecek Paket Bağımlılığı ... "
+        
+         # Geriye Say
+        sudo ./countdown.sh
+ 
+        # Bulunduğum dizini gör
+        echo -e "Bulunduğum dizin => $(pwd)\n"
+        sleep 1
+
+        echo -e "######### Paket Bağımlılığı #########\n"
+        read -p "Lütfen yüklemek istediğiniz paket adını yazınız nginx examples  " user_input
+
+        # dependency
+        dependency "$user_input"
+    else
+        echo -e "Paket Bağımlıklarını Yapılmadı... "
+    fi
+}
+
+dependency() {
+    # parametre - arguman
+    local packagename=$1
+    #
+    sudo apt-get check
+    sudo apt-cache depends $packagename
+    sudo apt-get install $packagename
+}
+
+
+###################################################################
+###################################################################
 # Install
 install() {
     sleep 2
     echo -e "\n###### ${INSTALL} ######  "
-    read -p "Sistem İçin Genel Yükleme İstiyor musunuz ? e/h " commonInstallResult
+    read -p "Sistem İçin Genel Paket Yüklemeleri İstiyor musunuz ? example: vim, rar,curl etc e/h " commonInstallResult
     if [[ $commonInstallResult == "e" || $commonInstallResult == "E" ]]; then
-        echo -e "Genel Yükleme Başladı ..."
+        echo -e "Genel Yükleme Başladı ... "
+
+        # Geriye Say
         sudo ./countdown.sh
+
         echo -e "Bulunduğum dizin => $(pwd)\n"
         sleep 1
         sudo apt-get install vim -y
@@ -246,10 +312,14 @@ install() {
         sleep 1
         sudo apt-get install openssh-server -y
         sleep 1
+
         # build-essential: Temel Geliştirme araçları içeren meta-pakettir
         sudo apt install build-essential wget zip unzip -y
-        # Firewall Function
+
+        # Firewall Install Function
         theFirewallInstall
+
+         # Firewall Delete Function
         theFirewallDelete
     else
         echo -e "Sistem İçin Genel Yükleme Yapılmadı..."
@@ -262,12 +332,16 @@ install
 packageInstall() {
     sleep 2
     echo -e "\n###### ${INSTALL} ######  "
-    read -p "Sistem İçin Genel Paket Yüklemek İstiyor musunuz ? e/h " packageInstallResult
+    read -p "Sistem İçin nginx,monitoring etc. Paketlerini Yüklemek İstiyor musunuz ? e/h " packageInstallResult
     if [[ $packageInstallResult == "e" || $packageInstallResult == "E" ]]; then
         echo -e "Genel Paket Yükleme Başladı ..."
+        
+        # Geriye Say
         sudo ./countdown.sh
+        
         echo -e "Bulunduğum dizin => $(pwd)\n"
         sleep 1
+
         echo -e "######### Nginx #########\n"
         # Nginx Check Package dependency Fonksiyonunu çağır
         check_package
@@ -276,6 +350,8 @@ packageInstall() {
         sudo apt-get install nginx -y
         sudo systemctl start nginx
         sudo systemctl enable nginx
+
+        # Geriye Say
         sudo ./countdown.sh
 
         #echo -e "######### nodejs #########\n"
@@ -294,43 +370,10 @@ packageInstall() {
         #echo -e "######### Python  #########\n"
         #sudo apt install python3 python3-pip -y
     else
-        echo -e "Sistem İçin Genel Paket Yüklemesi Yapılmadı..."
+        echo -e "Sistem İçin nginx,monitoring etc. Paketlerini Yüklemeleri Yapılmadı... "
     fi
 }
 packageInstall
-
-###################################################################
-###################################################################
-# Paket Bağımlıklarını Görme
-check_package() {
-    sleep 2
-    echo -e "\n###### ${CHECK} ######  "
-    read -p "Sistem İçin Genel Paket Yüklemek İstiyor musunuz ? e/h " checkResult
-    if [[ $checkResult == "e" || $checkResult == "E" ]]; then
-        echo -e "Yüklenecek Paket Bağımlılığı ..."
-        sudo ./countdown.sh
-        echo -e "Bulunduğum dizin => $(pwd)\n"
-        sleep 1
-
-        echo -e "######### Paket Bağımlılığı #########\n"
-        read -p "Lütfen yüklemek istediğiniz paket adını yazınız examples: nginx" user_input
-
-        # dependency
-        dependency "$user_input"
-    else
-        echo -e "Paket Bağımlıklarını Yapılmadı..."
-    fi
-}
-
-dependency() {
-    # parametre - arguman
-    local packagename=$1
-    #
-    sudo apt-get check
-    sudo apt-cache depends $packagename
-    sudo apt-get install $packagename
-}
-
 
 
 ###################################################################
@@ -342,7 +385,10 @@ information() {
     read -p "Genel Bilgileri Görmek ister misiniz ? e/h " informationResult
     if [[ $informationResult == "e" || $informationResult == "E" ]]; then
         echo -e "Genel Bilgiler Verilmeye Başlandı ..."
+
+         # Geriye Say
         sudo ./countdown.sh
+        
         #sudo su
         echo -e "Ben Kimim => $(whoami)\n"
         sleep 1
@@ -354,7 +400,7 @@ information() {
         sleep 1
         echo -e "Dağıtım Bilgileri => $(lsb_release -a)\n"
         sleep 1
-        echo -e "HDD Disk Bilgileri => $(df -m)\n"
+        echo -e "Hardisk Disk Bilgileri => $(df -m)\n"
         sleep 1
         echo -e "CPU Bilgileri => $(cat /proc/cpuinfo)\n"
         sleep 1
@@ -376,7 +422,10 @@ clean() {
     read -p "Sistemde Gereksiz Paketleri Temizlemek İster misiniz ? e/h " cleanResult
     if [[ $cleanResult == "e" || $cleanResult == "E" ]]; then
         echo -e "Gereksiz Paket Temizliği Başladı ..."
+
+         # Geriye Say
         sudo ./countdown.sh
+ 
         echo -e "######### Clean #########\n"
         sudo apt-get autoremove -y
         sudo apt autoclean
@@ -392,14 +441,14 @@ clean
 ###################################################################
 # Port And Version
 portVersion() {
-    node -v
     zip -v
     unzip -v+
     # build-essential:
     gcc --version # gcc: GNU C compiler derlemek
     g++ --version # g++: GNU C++ compiler derlemek
     make --version # make: Makefile kullanarak derlemek içindir
-    git --version
+    #git --version
+    #node -v
 }
 portVersion
 
@@ -409,12 +458,18 @@ portVersion
 # Clean
 # Install
 other_technology() {
+
+     # Geriye Say
     sudo ./countdown.sh
+ 
     echo -e "\n###### ${TECH} ######  "
     read -p "Sistem için Yüklemek İsteyeceğiniz Paketleri Yüklemek İster misiniz ? e/h " otherResult
     if [[ $otherResult == "e" || $otherResult == "E" ]]; then
         echo -e "Teknolojiler Yüklenmeye başlandı ..."
+        
+         # Geriye Say
         sudo ./countdown.sh
+ 
         echo -e "######### Teknolojiler #########\n"
         ./_2_other_programming.sh
        
