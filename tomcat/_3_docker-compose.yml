@@ -1,0 +1,72 @@
+# docker-compose --version
+# docker-compose up
+# docker-compose up -d
+# docker-compose -f _3_Docker_compose.yml up -d
+# docker-compose -f _3_Docker_compose.yml up
+# docker-compose down
+# docker-compose restart
+# docker-compose ps
+
+# restart: on-failure => Conteynar çökmesi halinde  Docker compose otomatik çalıştır.
+# restart: no         => Default olan. Docker compose otomatik başlasın.
+# restart: always     => Conteynar her zaman Docker compose otomatik başlasın.
+# restart:unless-stopped => Conteynar durduğu zaman Docker compose yeniden başlasın
+
+version: '3.8'
+
+# Services
+services:
+  apache_tomcat_web:
+    container_name: my_tomcat2
+    image: my_tomcat2
+    restart: on-failure 
+    #build: ./
+    #build: ./deneme
+    build:
+      context: .
+      dockerfile: _2_Dockerfile
+    ports:
+      - "1111:8080"
+    volumes:
+      - tomcat-logs:/usr/local/tomcat/logs
+      - tomcat-webapps:/usr/local/tomcat/webapps
+      - tomcat-conf:/usr/local/tomcat/conf
+      - ./tomcat/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+      - ./tomcat/context.xml:/usr/local/tomcat/webapps/manager/META-INF/context.xml
+  
+# Volume
+volumes:
+  tomcat-logs:
+    driver: local
+  tomcat-webapps:
+    driver: local
+  tomcat-conf:
+    driver: local
+
+# ./Deploy1.sh
+# docker ps
+# winpty docker container  exec -it  my_tomcat2 bash
+# cd usr/local/tomcat/logs
+# cd usr/local/tomcat/webapps
+# rm -rf examples
+# ls -al
+# 
+# docker-compose down
+# docker volume --help
+# docker volume ls
+# docker volume inspect <VOLUME_NAME>
+# docker volume rm <VOLUME_NAME>
+
+
+# Yeni bir container oluştur ve o container terminaline bağlan
+# Bu container içinde önceden verdiğim volume ekle
+# winpty docker run -it --rm --name volume_container \
+# -v tomcat_tomcat-conf://usr/local/tomcat/conf \
+# -v tomcat_tomcat-logs://usr/local/tomcat/logs \
+# -v tomcat_tomcat-webapps://usr/local/tomcat/webapps \
+# my_tomcat2 bash
+
+
+
+
+

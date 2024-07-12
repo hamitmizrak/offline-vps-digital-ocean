@@ -1,0 +1,25 @@
+$ docker info 
+$ hostname -i
+$ docker node ls 
+
+
+docker-playground KOPYALA : ctrl+insert 
+docker-playground YAPIŞTIR: shift+insert 
+
+STEP-1 (GENEL MÜDÜR)
+MANAGER IP (192.168.0.13)
+###############################################################
+# Genel Müdür 
+docker swarm init --advertise-addr 192.168.0.18
+
+# Genel Müdür Yardımcılarını seç
+docker swarm join-token manager
+docker swarm join --token SWMTKN-1-64yt31treqlt6atfu605spvghjofobag7lfs5soo1at2owu9bz-1o4nwdaoh0024z1sb1usgafm2 192.168.0.18:2377
+
+# Worker Yardımcılarını seç
+docker swarm join-token worker
+docker swarm join --token SWMTKN-1-64yt31treqlt6atfu605spvghjofobag7lfs5soo1at2owu9bz-819px6vk99jvgxxozune8qnl0 192.168.0.18:2377
+
+
+
+

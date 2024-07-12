@@ -1,0 +1,19 @@
+docker login
+Docker username: *****
+Docker password: *****
+
+docker image --help 
+docker image ls 
+docker images 
+docker image tag --help
+
+# TAG OLUŞTUR
+docker image tag <imageName>:latest <dockerHubRepositoryAddress>
+docker image tag my_tomcat2:latest javahamitmizrak/tomcat10_jdk11
+
+# IMAGE PUSH 
+docker push javahamitmizrak/tomcat10_jdk11
+
+# Pull 
+docker pull javahamitmizrak/tomcat10_jdk11
+
