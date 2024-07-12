@@ -1006,6 +1006,11 @@ dockerInstall() {
         # Docker Pulling
         dockerPulling
 
+        # Apache Tomcat 
+        docker run -d --name my_tomcat1 -p  1111:8080 tomcat:9.0.8-jre8-alpine
+        docker ps 
+        # docker container exec -it my_tomcat1 bash
+
         # DockerHub Login 
         dockerHubLogin
 
