@@ -13,7 +13,7 @@ LOGOUT="Sistemi Tekrar Başlatmak"
 CHECK="Yüklencek Paket bağımlılıkları"
 PACKAGE="Paket Sistemde Yüklü mü"
 JDK="JDK Kurmak"
-JENKINS="Jenkins Kurmak"
+JENKINS="Jenkins"
 TOMCAT="Apache Tomcat"
 DOCKER_PULL="Docker Pulling"
 LOGIN="Docker Login"
@@ -23,6 +23,8 @@ DOCKERCOMPOSE="Docker Compose"
 
 ###################################################################
 ###################################################################
+sudo chmod +x ./countdown.sh
+
 # Updated
 updated() {
     sleep 2
@@ -39,7 +41,7 @@ updated() {
             if [[ $listUpdatedResult == "e" || $listUpdatedResult == "E" ]]; then
                 echo -e "List Güncelleme Başladı ..."
                 # Geriye Say
-                sudo countdown.sh
+                sudo ./countdown.sh
 
                 sudo apt-get update
             else
@@ -51,7 +53,7 @@ updated() {
             if [[ $systemListUpdatedResult == "e" || $systemListUpdatedResult == "E" ]]; then
                 echo -e "Sistem Paket Güncellenmesi Başladı ..."
                 # Geriye Say
-                sudo countdown.sh
+                sudo ./countdown.sh
 
                 sudo apt-get update && sudo apt-get upgrade -y
             else
@@ -63,7 +65,7 @@ updated() {
             if [[ $kernelUpdatedResult == "e" || $kernelUpdatedResult == "E" ]]; then
                 echo -e "Kernel Güncelleme Başladı ..."
                 # Geriye Say
-                sudo countdown.sh
+                sudo ./countdown.sh
 
                 sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y
                 # Çekirdek(Kernel) güncellemelerinde yeniden başlamak gerekebilir
@@ -90,7 +92,7 @@ logout() {
         echo -e "Sitem Kapatılıyor ..."
 
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
 
         # Update
         sudo apt update
@@ -117,7 +119,7 @@ is_loading_package() {
         echo -e "Yüklenmiş paket bilgisini öğrenme ..."
 
         # Geri Sayım
-        sudo countdown.sh
+        sudo ././countdown.sh
 
         echo -e "Bulunduğum dizin => $(pwd)\n"
         sleep 1
@@ -149,13 +151,13 @@ package_information() {
     dpkg-query -W -f='${Status} ${Package}\n' $packagename
 
     # Geri Sayım
-    sudo countdown.sh
+    sudo ./countdown.sh
 
     # Yüklü Tüm paketleri Listele
     dpkg -l 
 
     # Geri Sayım
-    sudo countdown.sh
+    sudo ./countdown.sh
 
     # Eğer paket isimleri uzunsa grep ile arama yap 
     dpkg -l | grep $packagename
@@ -182,7 +184,7 @@ check_package() {
         echo -e "Yüklenecek Paket Bağımlılığı ..."
 
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
 
         echo -e "Bulunduğum dizin => $(pwd)\n"
         sleep 1
@@ -218,7 +220,7 @@ clean() {
         echo -e "Gereksiz Paket Temizliği Başladı ..."
 
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
 
         echo -e "######### nginx #########\n"
         sudo apt-get autoremove -y
@@ -240,7 +242,7 @@ gitInstall() {
     updated
 
     # Geri Sayım
-    sudo countdown.sh
+    sudo ./countdown.sh
 
     echo -e "\n###### ${INSTALL} ######  "
     read -p "Git Paketini Yüklemek İstiyor musunuz ? e/h " gitInstallResult
@@ -248,7 +250,7 @@ gitInstall() {
         echo -e "Git Paket Yükleme Başladı ..."
 
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
 
         echo -e "Bulunduğum dizin => $(pwd)\n"
         sleep 1
@@ -262,7 +264,7 @@ gitInstall() {
         git config --global -l
 
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
 
         echo -e "######### Git Version #########\n"
         git --version
@@ -290,7 +292,7 @@ vsCodeInstall() {
     updated
 
     # Geri Sayım
-    sudo countdown.sh
+    sudo ./countdown.sh
 
     echo -e "\n###### ${INSTALL} ######  "
     read -p "VS Code Paketini Yüklemek İstiyor musunuz ? e/h " vscodeInstallResult
@@ -298,7 +300,7 @@ vsCodeInstall() {
         echo -e "VS Code Paket Yükleme Başladı ..."
 
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
 
         echo -e "Bulunduğum dizin => $(pwd)\n"
         sleep 1
@@ -337,7 +339,7 @@ jdkInstall() {
     updated
 
     # Geri Sayım
-    sudo countdown.sh
+    sudo ./countdown.sh
 
     echo -e "\n###### ${JDK} ######  "
     read -p "JDK Paketini Yüklemek İstiyor musunuz ? e/h " jdkInstallResult
@@ -345,7 +347,7 @@ jdkInstall() {
         echo -e "JDK Paket Yükleme Başladı ..."
 
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
 
         echo -e "Bulunduğum dizin => $(pwd)\n"
         sleep 1
@@ -359,7 +361,7 @@ jdkInstall() {
         #sudo update-alternative --config java
 
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
 
         echo -e "######### Git Version #########\n"
         which git
@@ -390,7 +392,7 @@ mavenInstall() {
     updated
 
     # Geri Sayım
-    sudo countdown.sh
+    sudo ./countdown.sh
 
     echo -e "\n###### ${INSTALL} ######  "
     read -p "MAVEN Paketini Yüklemek İstiyor musunuz ? e/h " mavenInstallResult
@@ -398,7 +400,7 @@ mavenInstall() {
         echo -e "MAVEN Paket Yükleme Başladı ..."
 
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
 
         echo -e "Bulunduğum dizin => $(pwd)\n"
         sleep 1
@@ -410,13 +412,13 @@ mavenInstall() {
         #sudo update-alternative --config java
 
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
 
         # Maven Yükle
         sudo apt install maven 
         
          # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
 
         echo -e "######### Version #########\n"
         which git
@@ -444,21 +446,70 @@ mavenInstall
 ###################################################################
 ###################################################################
 # JENKINS Packet Install
-# Install
+
+# Jenkins Delete
+jenkinsDelete() {
+     # Güncelleme Fonksiyonu
+    updated
+
+    # Geri Sayım
+    sudo ./countdown.sh
+
+    echo -e "\n###### ${JENKINS} Delete ######  "
+    read -p "Jenkins Paketini Silmek İstiyor musunuz ? e/h " jenkinsDeleteResult
+    if [[ $jenkinsDeleteResult == "e" || $jenkinsDeleteResult == "E" ]]; then
+        echo -e "Jenkins Paket Yükleme Başladı ..."
+
+        # Geri Sayım
+        sudo ./countdown.sh
+
+        echo -e "Bulunduğum dizin => $(pwd)\n"
+        sleep 1
+        echo -e "######### JENKINS DELETE #########\n"
+
+        # Yükleme
+        java --version 
+        javac --version
+        mvn -v
+        #sudo update-alternative --config java
+
+        # Geri Sayım
+        sudo ./countdown.sh
+
+        echo -e "######### JENKINS DELETE #########\n"
+        sudo service jenkins stop
+        sudo apt-get remove --purge jenkins
+        sudo apt-get remove jenkins
+        sudo apt-get remove --auto-remove jenkins -y
+
+        # Clean Function
+        clean
+
+        # Yüklenen Paket Hakkında Bilgi Almak
+        is_loading_package
+
+        # VSCODE Check Package dependency Fonksiyonunu çağır
+        check_package
+    else
+        echo -e "Maven Yüklenmesi Yapılmadı...."
+    fi
+}
+
+# Jenkins Install
 jenkinsInstall() {
      # Güncelleme Fonksiyonu
     updated
 
     # Geri Sayım
-    sudo countdown.sh
+    sudo ./countdown.sh
 
-    echo -e "\n###### ${JENKINS} ######  "
+    echo -e "\n###### ${JENKINS} Kurmak ######  "
     read -p "Jenkins Paketini Yüklemek İstiyor musunuz ? e/h " jenkinsInstallResult
     if [[ $jenkinsInstallResult == "e" || $jenkinsInstallResult == "E" ]]; then
         echo -e "Jenkins Paket Yükleme Başladı ..."
 
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
 
         echo -e "Bulunduğum dizin => $(pwd)\n"
         sleep 1
@@ -471,15 +522,16 @@ jenkinsInstall() {
         #sudo update-alternative --config java
 
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
 
         # Jenkins Yükle
         sudo wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
         sudo sh -c 'echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list'
+        sudo apt-get update
         sudo apt-get install jenkins -y
 
           # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
 
         sudo ufw allow 3333
 
@@ -488,13 +540,14 @@ jenkinsInstall() {
 
         # Jenkins'i başlatın ve durumu kontrol edin
         sudo systemctl start jenkins
+        sudo systemctl restart jenkins 
         sudo systemctl status jenkins
 
         # Jenkins'in otomatik olarak başlamasını etkinleştirin
         sudo systemctl enable jenkins
         
          # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
 
         # Jenkins Şifre Al
         sudo cat /var/lib/jenkins/secrets/initialAdminPassword 
@@ -522,41 +575,45 @@ jenkinsInstall() {
 }
 jenkinsInstall
 
+# Jenkins Delete
+jenkinsDelete
 
-jenkinsDelete() {
+###################################################################
+###################################################################
+# Apache Tomcat Packet Install
+
+# Tomcat Delete
+apacheTomcatDelete() {
      # Güncelleme Fonksiyonu
     updated
 
     # Geri Sayım
-    sudo countdown.sh
+    sudo ./countdown.sh
 
-    echo -e "\n###### ${JENKINS} Delete ######  "
-    read -p "Jenkins Paketini Silmek İstiyor musunuz ? e/h " jenkinsDeleteResult
-    if [[ $jenkinsDeleteResult == "e" || $jenkinsDeleteResult == "E" ]]; then
-        echo -e "Jenkins Paket Yükleme Başladı ..."
-
-        # Geri Sayım
-        sudo countdown.sh
-
-        echo -e "Bulunduğum dizin => $(pwd)\n"
-        sleep 1
-        echo -e "######### JENKINS DELETE #########\n"
+    echo -e "\n###### ${TOMCAT} ######  "
+    read -p "APACHE TOMCAT Paketini Silmek İstiyor musunuz ? e/h " apacheTomcatDeleteResult
+    if [[ $apacheTomcatDeleteResult == "e" || $apacheTomcatDeleteResult == "E" ]]; then
+        echo -e "APACHE TOMCAT Paket Silme Yükleme Başladı ..."
 
         # Yükleme
         java --version 
         javac --version
-        mvn -v
-        #sudo update-alternative --config java
+        mvn --version
 
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
 
-        echo -e "######### JENKINS DELETE #########\n"
-        sudo service jenkins stop
-        sudo apt-get remove --purge jenkins
-        sudo apt-get remove jenkins
-        sudo apt-get remove --auto-remove jenkins -y
+        echo -e "Bulunduğum dizin => $(pwd)\n"
+        sleep 1
+        echo -e "######### APACHE TOMCAT #########\n"
+        sudo rm -rf /opt/tomcat
+    
+        # Eğer Açılmazsa
+        # sudo /opt/tomcat/bin/startup.sh
 
+         # Geri Sayım
+        sudo ./countdown.sh
+        
         # Clean Function
         clean
 
@@ -566,21 +623,17 @@ jenkinsDelete() {
         # VSCODE Check Package dependency Fonksiyonunu çağır
         check_package
     else
-        echo -e "Maven Yüklenmesi Yapılmadı...."
+        echo -e "Apache Tomcat Silme Yapılmadı...."
     fi
 }
-jenkinsDelete
 
-###################################################################
-###################################################################
-# Apache Tomcat Packet Install
-# Install
+# Tomcat Install
 apacheTomcatInstall() {
      # Güncelleme Fonksiyonu
     updated
 
     # Geri Sayım
-    sudo countdown.sh
+    sudo ./countdown.sh
 
     echo -e "\n###### ${TOMCAT} ######  "
     read -p "APACHE TOMCAT Paketini Yüklemek İstiyor musunuz ? e/h " apacheTomcatInstallResult
@@ -593,7 +646,7 @@ apacheTomcatInstall() {
         mvn --version
 
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
 
         echo -e "Bulunduğum dizin => $(pwd)\n"
         sleep 1
@@ -602,7 +655,7 @@ apacheTomcatInstall() {
         #sudo update-alternative --config java
 
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
 
         # Apache Tomcat Yükle
         # Tomcat 10 için En az JDK 11 kurmalısınız
@@ -617,14 +670,20 @@ apacheTomcatInstall() {
         sudo chmod -R 755 /opt/tomcat/
         
          # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
+
+        # Değişkenler
+        TOMCAT_PORT=4444
+        INSTALL_DIR=/opt/tomcat
+        # 8080 => 
+        sudo sed -i "s/port=\"8080\"/port=\"$TOMCAT_PORT\"/" $INSTALL_DIR/conf/server.xml
 
         # Tomcat Servisi Başlatma Ve Etkinleştirme
         sudo systemctl daemon-reload
         sudo systemctl start tomcat
 
         # Test 
-        sudo curl http://localhost:8080
+        sudo curl http://localhost:4444
 
         # Restart
         sudo systemctl restart tomcat
@@ -635,8 +694,11 @@ apacheTomcatInstall() {
         # Tomcat Version
         sudo /opt/tomcat/bin/catalina.sh version 
 
+        # Eğer Açılmazsa
+        # sudo /opt/tomcat/bin/startup.sh
+
          # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         
         echo -e "######### Version #########\n"
         which git
@@ -661,6 +723,9 @@ apacheTomcatInstall() {
 }
 apacheTomcatInstall
 
+# Tomcat Silmek
+apacheTomcatDelete
+
 ###################################################################
 ###################################################################
 # Docker Compose
@@ -672,14 +737,14 @@ dockerCompose(){
     then
         echo -e "Docker Compose Ekleniyor ... " 
          # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "Docker Tek bir satırda kurmak için aşağıdaki kodu kullanabilirsiniz: sudo curl -Ssl https://get.docker.com | bash - \n "  
 
         # Docker Kurulumunu Tek satırda çalıştırmak
         #sudo curl -Ssl https://get.docker.com | bash -
 
          # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "Docker-compose Kurulumu Başladı "  
 
         # Docker Compose Kurulumu
@@ -695,7 +760,7 @@ dockerCompose(){
 # Docker Portainer
 dockerPortainer(){
     # Geri Sayım
-    sudo countdown.sh
+    sudo ./countdown.sh
 
     echo -e "\n### ${PORTAINER} ###"
     read -p "\nDockerHub'a Çıkış yapmak istiyor musunuz ? E/H? " portainerResult
@@ -703,13 +768,13 @@ dockerPortainer(){
     then
         echo -e "Docker Portainer ... "  
          # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "Docker Portainer Kurulum Başladı " 
         ##### Aşağıdaki kodları yaz ##########################################
         sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "Docker Portainer CHMOD " 
         ##### CHMOD ##########################################
         sudo chmod +x /usr/local/bin/docker-compose
@@ -717,11 +782,11 @@ dockerPortainer(){
 
         ##### PORT##########################################
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "Docker Portainer Port "
         sudo docker run -d -p 2222:9000 -p 8000:8000 --name portainer --restart always -v /var/run/docker.sock:/var/run/docker.sock -v /srv/portainer:/data portainer/portainer
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "Docker Portainer Start "
         sudo docker start portainer
         #sudo docker stop portainer
@@ -729,7 +794,7 @@ dockerPortainer(){
         ##### CHMOD ##########################################
         sudo ifconfig
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "Docker Portainer http:localhost:2222"
         sudo curl localhost:2222 
 
@@ -750,51 +815,51 @@ dockerPulling() {
     then
         echo -e "Docker Pulling ... " 
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "Docker Pulling nginx" 
         sudo docker pull nginx
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "Docker Pulling nodejs"
         sudo docker pull node # nodejs
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "Docker Pulling Httpd" 
         sudo docker pull httpd # apache
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "Docker Pulling tomcat:9.0.8-jre8-alpine" 
         docker pull tomcat:9.0.8-jre8-alpine
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "Docker Pulling mysql" 
         sudo docker pull mysql
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "Docker Pulling postgres" 
         sudo docker pull postgres
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "Docker Pulling mongo"
         sudo docker pull mongo # nosql
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "Docker Pulling redis"
         sudo docker pull redis
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "Docker Pulling ubuntu"
         sudo docker pull ubuntu
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "Docker Pulling alpine"
         sudo docker pull alpine
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "Docker Pulling centos"
         sudo docker pull centos
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "Docker Pulling python"
         sudo docker pull python:3.8
         docker images
@@ -810,7 +875,7 @@ dockerHubLogin() {
     if [[ $updatedResult == "E" || $updatedResult == "e"  ]]
     then
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "Docker Login ... "  
         sudo docker login
     else
@@ -826,7 +891,7 @@ dockerHubLogout() {
     if [[ $updatedResult == "E" || $updatedResult == "e"  ]]
     then
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "Docker Login ... "  
         sudo docker logout
     else
@@ -842,7 +907,7 @@ dockerInstall() {
     updated
 
     # Geri Sayım
-    sudo countdown.sh
+    sudo ./countdown.sh
 
     echo -e "\n###### ${INSTALL} ######  "
     read -p "Docker Paketini Yüklemek İstiyor musunuz ? e/h " dockerInstallResult
@@ -857,7 +922,7 @@ dockerInstall() {
         mvn --version
 
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
 
         echo -e "Bulunduğum dizin => $(pwd)\n"
         sleep 1
@@ -875,27 +940,27 @@ dockerInstall() {
         sudo apt-get upgrade
 
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "######### Docker Https Üzerinden Depo İznini Ver#########\n"
          ### HTTPS üzerinden bir depo kullanmasına izin vermek için##################################
         sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y
 
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "######### Docker Resmi GPG Anahtarını Ekle #########\n"
         ### Docker’ın resmi GPG anahtarını ekleyiniz. curl aracı ile GPG anahtarını komut içerisine aktarınız
         sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
         sudo apt-key fingerprint 0EBFCD88
 
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "######### Docker Curl Araçını Docker Apt Deposuna Ekle #########\n"
         ### curl aracı ile Docker apt deposunu eklemek
         sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
         ###############DOCKER KURULUMU##########################################
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "######### Docker Kurulumuna Başla #########\n"
         sudo apt-get update
         sudo apt-get install docker-ce docker-ce-cli containerd.io -y
@@ -904,14 +969,14 @@ dockerInstall() {
         # sleep 2
         # q
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "######### Docker Enable/Start #########\n"
         sudo systemctl enable --now docker 
         sudo systemctl start docker
         # sudo systemctl status docker
 
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         echo -e "######### Docker User Mod Ekle #########\n"
         ### kullanıcı adınızı docker grubuna ekle
         sudo usermod -aG docker ${USER}
@@ -930,7 +995,7 @@ dockerInstall() {
         dockerPortainer
         
          # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
 
         # Docker Pulling
         dockerPulling
@@ -976,7 +1041,7 @@ information() {
         echo -e "Genel Bilgiler Verilmeye Başlandı ..."
 
         # Geri Sayım
-        sudo countdown.sh
+        sudo ./countdown.sh
         #sudo su
         echo -e "Ben Kimim => $(whoami)\n"
         sleep 1

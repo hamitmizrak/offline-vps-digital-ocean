@@ -10,7 +10,7 @@ CHMOD="Erişim İzni"
 INFORMATION="Genel Bilgiler Ports | NETWORKING"
 UFW="Uncomplicated Firewall Ggüvenlik duvarı Yöentim Araçı"
 LOGOUT="Sistemi Tekrar Başlatmak"
-CHECK="Yüklencek Paket bağımlılıkları"
+CHECK="Yüklenecek Paket bağımlılıkları"
 TECH="Diğer Teknolojiler"
 
 ###################################################################
@@ -38,7 +38,7 @@ accessPermission() {
         ls -l reboot.sh
 
         # İzinleri Sembolik Mod olarak değiştirmek
-        chmod u+rwx,g+rx,o+rx ./script
+        chmod u+rwx,g+rx,o+rx ../script
 
         # İzinleri Sayısal Mod olarak değiştirmek
         chmod 755 ../script
@@ -181,6 +181,7 @@ theFirewallInstall() {
         sudo ufw allow 2222 # docker portainer
         sudo ufw allow 8000 # docker portainer
         sudo ufw allow 3333 # Jenkins
+        sudo ufw allow 4444 # Tomcat
         sudo ufw allow 3306 # mysql
         sudo ufw allow 5432 # Postgresql
         sudo ufw allow 8080 # Genel Port
