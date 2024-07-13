@@ -10,7 +10,7 @@ CHMOD="Erişim İzni"
 INFORMATION="Genel Bilgiler Ports | NETWORKING"
 UFW="Uncomplicated Firewall Ggüvenlik duvarı Yöentim Araçı"
 LOGOUT="Sistemi Tekrar Başlatmak"
-CHECK="Yüklencek Paket bağımlılıkları"
+CHECK="Yüklenecek Paket bağımlılıkları"
 PACKAGE="Paket Sistemde Yüklü mü"
 JDK="JDK Kurmak"
 JENKINS="Jenkins"
@@ -121,7 +121,7 @@ is_loading_package() {
         echo -e "Yüklenmiş paket bilgisini öğrenme ..."
 
         # Geri Sayım
-        sudo ././countdown.sh
+        sudo ./countdown.sh
 
         echo -e "Bulunduğum dizin => $(pwd)\n"
         sleep 1
@@ -377,7 +377,7 @@ jdkInstall() {
         # Yüklenen Paket Hakkında Bilgi Almak
         is_loading_package
 
-        # VSCODE Check Package dependency Fonksiyonunu çağır
+        #  Check Package dependency Fonksiyonunu çağır
         check_package
     else
         echo -e "JDK Yüklenmesi Yapılmadı...."
@@ -537,16 +537,27 @@ jenkinsInstall() {
         /etc/apt/sources.list.d/jenkins.list > /dev/null
         
         sudo apt-get update
+        # Geri Sayım
+        sudo ./countdown.sh
+
+        echo -e "Jenkins Kuruluyor"
         sudo apt-get install jenkins -y
 
         # Jenkins'in varsayılan yapılandırma dosyasını düzenleyerek portu 9090 olarak değiştirin
         sudo sed -i 's/Environment="JENKINS_PORT=8080"/Environment="JENKINS_PORT=3333"/' /usr/lib/systemd/system/jenkins.service
         systemctl daemon-reload
+
         # Jenkins'in otomatik olarak başlamasını etkinleştirin
         sudo systemctl enable jenkins
+        # Jenkins Start
         sudo systemctl start jenkins
+        # Jenkins Restart
         sudo systemctl restart jenkins
+
+        # Jnekins Stop
         # sudo systemctl stop jenkins
+
+        # Jenkins Durumu
         sudo systemctl status Jenkins
 
          # Geri Sayım
@@ -683,7 +694,7 @@ apacheTomcatInstall() {
 
         sudo ./opt/tomcat/bin/startup.sh
 
-        # Tomcat Servisi Başlatma Ve Etkinleştirme
+        # Tomcat Servisini eğer install ile yüklerseniz aşağıdaki komutları aktifleştirin Başlatma Ve Etkinleştirme
         #sudo systemctl daemon-reload
         #sudo systemctl start tomcat
 
@@ -731,12 +742,10 @@ apacheTomcatInstall
 # Tomcat Silmek
 apacheTomcatDelete
 
-
 ###################################################################
 ###################################################################
 # Docker Compose
 dockerCompose(){
-   
     echo -e "\n### ${DOCKERCOMPOSE} ###"
     read -p "\nDocker Compose Eklemek İstiyor musunuz ? E/H? " dockerComposeResult
     if [[ $dockerComposeResult == "E" || $dockerComposeResult == "e"  ]]
@@ -891,7 +900,6 @@ dockerHubLogin() {
 
 # dockerHubLogout
 dockerHubLogout() {
-
     echo -e "\n### ${LOGOUT} ###"
     read -p "\nDockerHub'a Çıkış yapmak istiyor musunuz ? E/H? " updatedResult
     if [[ $updatedResult == "E" || $updatedResult == "e"  ]]
@@ -908,7 +916,6 @@ dockerHubLogout() {
 # Docker Packet Install
 # Install
 dockerInstall() {
-
      # Güncelleme Fonksiyonu
     updated
 
